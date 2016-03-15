@@ -57,6 +57,46 @@ jfieldID cl_image_desc_num_mip_levels; // cl_uint
 jfieldID cl_image_desc_num_samples; // cl_uint
 jfieldID cl_image_desc_buffer; // cl_mem
 
+// Class and method ID for cl_platform_id and its constructor
+jclass cl_platform_id_Class;
+jmethodID cl_platform_id_Constructor;
+
+// Class and method ID for cl_device_id and its constructor
+jclass cl_device_id_Class;
+jmethodID cl_device_id_Constructor;
+
+// Class and method ID for cl_context and its constructor
+jclass cl_context_Class;
+jmethodID cl_context_Constructor;
+
+// Class and method ID for cl_command_queue and its constructor
+jclass cl_command_queue_Class;
+jmethodID cl_command_queue_Constructor;
+
+// Class and method ID for cl_mem and its constructor
+jclass cl_mem_Class;
+jmethodID cl_mem_Constructor;
+
+// Class and method ID for cl_image_format and its constructor
+jclass cl_image_format_Class;
+jmethodID cl_image_format_Constructor;
+
+// Class and method ID for cl_sampler and its constructor
+jclass cl_sampler_Class;
+jmethodID cl_sampler_Constructor;
+
+// Class and method ID for cl_program and its constructor
+jclass cl_program_Class;
+jmethodID cl_program_Constructor;
+
+// Class and method ID for cl_kernel and its constructor
+jclass cl_kernel_Class;
+jmethodID cl_kernel_Constructor;
+
+// Class and method ID for cl_event and its constructor
+jclass cl_event_Class;
+jmethodID cl_event_Constructor;
+
 /**
  * The CallbackInfo structures of all contexts that have
  * been created so far and not released yet
@@ -93,6 +133,19 @@ int initCLJNIUtils(JNIEnv *env)
     if (!init(env, cls, cl_image_desc_num_mip_levels,    "num_mip_levels",    "I")) return JNI_ERR;
     if (!init(env, cls, cl_image_desc_num_samples,       "num_samples",       "I")) return JNI_ERR;
     if (!init(env, cls, cl_image_desc_buffer,            "buffer",            "Lorg/jocl/cl_mem;")) return JNI_ERR;
+
+    // Obtain the global class references and the constructor methodIDs
+    // for classes which will have to be instantiated
+    if (!init(env, "org/jocl/cl_platform_id",    cl_platform_id_Class,   cl_platform_id_Constructor  )) return JNI_ERR;
+    if (!init(env, "org/jocl/cl_device_id",      cl_device_id_Class,     cl_device_id_Constructor    )) return JNI_ERR;
+    if (!init(env, "org/jocl/cl_context",        cl_context_Class,       cl_context_Constructor      )) return JNI_ERR;
+    if (!init(env, "org/jocl/cl_command_queue",  cl_command_queue_Class, cl_command_queue_Constructor)) return JNI_ERR;
+    if (!init(env, "org/jocl/cl_mem",            cl_mem_Class,           cl_mem_Constructor          )) return JNI_ERR;
+    if (!init(env, "org/jocl/cl_image_format",   cl_image_format_Class,  cl_image_format_Constructor )) return JNI_ERR;
+    if (!init(env, "org/jocl/cl_sampler",        cl_sampler_Class,       cl_sampler_Constructor      )) return JNI_ERR;
+    if (!init(env, "org/jocl/cl_program",        cl_program_Class,       cl_program_Constructor      )) return JNI_ERR;
+    if (!init(env, "org/jocl/cl_kernel",         cl_kernel_Class,        cl_kernel_Constructor       )) return JNI_ERR;
+    if (!init(env, "org/jocl/cl_event",          cl_event_Class,         cl_event_Constructor        )) return JNI_ERR;
 
     return JNI_VERSION_1_4;
 }

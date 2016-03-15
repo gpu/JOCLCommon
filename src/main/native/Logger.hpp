@@ -25,8 +25,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef LOGGER_HPP
-#define LOGGER_HPP
+#ifndef JOCL_LOGGER_HPP
+#define JOCL_LOGGER_HPP
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -45,4 +45,5 @@ class Logger
 
 };
 
-#endif
+#endif // JOCL_LOGGER_HPP
+

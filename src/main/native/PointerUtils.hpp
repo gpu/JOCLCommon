@@ -25,8 +25,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef POINTER_UTILS_HPP
-#define POINTER_UTILS_HPP
+#ifndef JOCL_POINTER_UTILS_HPP
+#define JOCL_POINTER_UTILS_HPP
 
 #include <jni.h>
 
@@ -88,4 +88,5 @@ bool releasePointerData(JNIEnv *env, PointerData* &pointerData, jint mode=0);
 
 void setNativePointer(JNIEnv *env, jobject pointerObject, jlong pointer);
 
-#endif // POINTER_UTILS_HPP
+#endif // JOCL_POINTER_UTILS_HPP
+

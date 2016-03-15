@@ -32,4 +32,5 @@ add_library(JOCLCommon
   src/main/native/CLJNIUtils.cpp 
   src/main/native/JNIUtils.cpp 
   src/main/native/PointerUtils.cpp
+  src/main/native/ConversionsCL.cpp
 )

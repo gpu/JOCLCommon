@@ -25,8 +25,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CL_JNI_UTILS_HPP
-#define CL_JNI_UTILS_HPP
+#ifndef JOCL_CL_JNI_UTILS_HPP
+#define JOCL_CL_JNI_UTILS_HPP
 
 #include "JOCLCommon.hpp"
 #include <map>
@@ -120,6 +120,46 @@ extern jfieldID cl_image_desc_num_mip_levels; // cl_uint
 extern jfieldID cl_image_desc_num_samples; // cl_uint
 extern jfieldID cl_image_desc_buffer; // cl_mem
 
+// Class and method ID for cl_platform_id and its constructor
+extern jclass cl_platform_id_Class;
+extern jmethodID cl_platform_id_Constructor;
+
+// Class and method ID for cl_device_id and its constructor
+extern jclass cl_device_id_Class;
+extern jmethodID cl_device_id_Constructor;
+
+// Class and method ID for cl_context and its constructor
+extern jclass cl_context_Class;
+extern jmethodID cl_context_Constructor;
+
+// Class and method ID for cl_command_queue and its constructor
+extern jclass cl_command_queue_Class;
+extern jmethodID cl_command_queue_Constructor;
+
+// Class and method ID for cl_mem and its constructor
+extern jclass cl_mem_Class;
+extern jmethodID cl_mem_Constructor;
+
+// Class and method ID for cl_image_format and its constructor
+extern jclass cl_image_format_Class;
+extern jmethodID cl_image_format_Constructor;
+
+// Class and method ID for cl_sampler and its constructor
+extern jclass cl_sampler_Class;
+extern jmethodID cl_sampler_Constructor;
+
+// Class and method ID for cl_program and its constructor
+extern jclass cl_program_Class;
+extern jmethodID cl_program_Constructor;
+
+// Class and method ID for cl_kernel and its constructor
+extern jclass cl_kernel_Class;
+extern jmethodID cl_kernel_Constructor;
+
+// Class and method ID for cl_event and its constructor
+extern jclass cl_event_Class;
+extern jmethodID cl_event_Constructor;
+
 /**
  * The CallbackInfo structures of all contexts that have
  * been created so far and not released yet
@@ -155,4 +195,4 @@ void deleteCallbackInfo(JNIEnv *env, CallbackInfo* &callbackInfo);
 void destroyCallbackInfo(JNIEnv *env, cl_context context);
 void finishCallback(JNIEnv *env);
 
-#endif // CL_JNI_UTILS_HPP
+#endif // JOCL_CL_JNI_UTILS_HPP
