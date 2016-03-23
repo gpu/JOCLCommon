@@ -25,7 +25,6 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 */
 #include "ConversionsCL.hpp"
-
 #include <jni.h>
 #include <cstdint>
 #include <cstring>
@@ -154,7 +153,7 @@ bool releaseNative(JNIEnv *env, cl_double* &nativeObject, jdoubleArray javaObjec
 
 
 
-
+// Single native cl_context and single Java cl_context object
 bool initNative(JNIEnv *env, jobject context, cl_context& context_native, bool fillTarget)
 {
     if (context != nullptr)
@@ -169,6 +168,7 @@ bool initNative(JNIEnv *env, jobject context, cl_context& context_native, bool f
 }
 
 
+// Single native cl_mem and single Java cl_mem object
 bool initNative(JNIEnv *env, jobject mem, cl_mem& mem_native, bool fillTarget)
 {
     if (mem != nullptr)
@@ -198,7 +198,7 @@ jobject create(JNIEnv *env, cl_mem& mem_native)
     return mem;
 }
 
-
+// Single native cl_command_queue and single Java cl_command_queue object
 bool initNative(JNIEnv *env, jobject commandQueue, cl_command_queue& commandQueue_native, bool fillTarget)
 {
     if (commandQueue != nullptr)
@@ -212,26 +212,37 @@ bool initNative(JNIEnv *env, jobject commandQueue, cl_command_queue& commandQueu
     return true;
 }
 
-bool releaseNative(JNIEnv *env, cl_event* &event_native, jobject event, bool writeBack)
+// Native cl_command_queue pointer and single Java cl_command_queue object
+bool initNative(JNIEnv *env, jobject commandQueue, cl_command_queue* &commandQueue_native, bool fillTarget)
 {
-    if (writeBack)
+    if (commandQueue == nullptr)
     {
-        if (event_native != nullptr)
-        {
-            if (event == nullptr)
-            {
-                ThrowByName(env, "java/lang/NullPointerException",
-                    "Trying to write to 'null' object");
-                return false;
-            }
-            env->SetLongField(event, NativePointerObject_nativePointer, (jlong)event_native);
-        }
+        commandQueue_native = nullptr;
+        return true;
     }
+    commandQueue_native = new cl_command_queue[1]();
+    if (fillTarget)
+    {
+        commandQueue_native[0] = (cl_command_queue)env->GetLongField(commandQueue, NativePointerObject_nativePointer);
+    }
+    return true;
+}
+
+bool releaseNative(JNIEnv *env, cl_command_queue* &commandQueue_native, jobject commandQueue, bool writeBack)
+{
+    if (writeBack && commandQueue != nullptr && commandQueue_native != nullptr)
+    {
+        env->SetLongField(commandQueue, NativePointerObject_nativePointer, (jlong)(*commandQueue_native));
+    }
+    delete[] commandQueue_native;
+    commandQueue_native = nullptr;
     return true;
 }
 
 
 
+
+// Native cl_command_queue pointer and Java cl_command_queue array
 bool initNative(JNIEnv *env, jobjectArray commandQueues, cl_command_queue* &commandQueues_native, bool fillTarget)
 {
     return initNativeGenericNativePointerObject<cl_command_queue>(env, commandQueues, commandQueues_native, fillTarget);
@@ -243,6 +254,36 @@ bool releaseNative(JNIEnv *env, cl_command_queue* &commandQueues_native, jobject
 }
 
 
+
+// Native cl_event pointer and single Java cl_event object
+bool releaseNative(JNIEnv *env, cl_event* &event_native, jobject event, bool writeBack)
+{
+    if (writeBack && event != nullptr && event_native != nullptr)
+    {
+        env->SetLongField(event, NativePointerObject_nativePointer, (jlong)(*event_native));
+    }
+    delete[] event_native;
+    event_native = nullptr;
+    return true;
+}
+
+bool initNative(JNIEnv *env, jobject event, cl_event* &event_native, bool fillTarget)
+{
+    if (event == nullptr)
+    {
+        event_native = nullptr;
+        return true;
+    }
+    event_native = new cl_event[1]();
+    if (fillTarget)
+    {
+        event_native[0] = (cl_event)env->GetLongField(event, NativePointerObject_nativePointer);
+    }
+    return true;
+}
+
+
+// Native cl_event pointer and Java cl_event array
 bool initNative(JNIEnv *env, jobjectArray events, cl_event* &events_native, bool fillTarget)
 {
     return initNativeGenericNativePointerObject<cl_event>(env, events, events_native, fillTarget);

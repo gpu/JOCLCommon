@@ -272,19 +272,31 @@ bool releaseNativeGenericNativePointerObject(
     return true;
 }
 
+// Single native cl_context and single Java cl_context object
 bool initNative(JNIEnv *env, jobject context, cl_context& context_native, bool fillTarget);
 
+// Single native cl_mem and single Java cl_mem object
 bool initNative(JNIEnv *env, jobject mem, cl_mem& mem_native, bool fillTarget);
+
 jobject create(JNIEnv *env, cl_mem& mem_native);
 
 
+// Single native cl_command_queue and single Java cl_command_queue object
 bool initNative(JNIEnv *env, jobject commandQueue, cl_command_queue& commandQueue_native, bool fillTarget);
-bool releaseNative(JNIEnv *env, cl_event* &event_native, jobject event, bool writeBack);
 
+// Native cl_command_queue pointer and single Java cl_command_queue object
+bool initNative(JNIEnv *env, jobject commandQueue, cl_command_queue* &commandQueue_native, bool fillTarget);
+bool releaseNative(JNIEnv *env, cl_command_queue* &commandQueue_native, jobject commandQueue, bool writeBack);
+
+// Native cl_command_queue pointer and Java cl_command_queue array
 bool initNative(JNIEnv *env, jobjectArray commandQueues, cl_command_queue* &commandQueues_native, bool fillTarget);
 bool releaseNative(JNIEnv *env, cl_command_queue* &commandQueues_native, jobjectArray commandQueues, bool writeBack);
 
+// Native cl_event pointer and single Java cl_event object
+bool initNative(JNIEnv *env, jobject event, cl_event* &event_native, bool fillTarget);
+bool releaseNative(JNIEnv *env, cl_event* &event_native, jobject event, bool writeBack);
 
+// Native cl_event pointer and Java cl_event array
 bool initNative(JNIEnv *env, jobjectArray events, cl_event* &events_native, bool fillTarget);
 bool releaseNative(JNIEnv *env, cl_event* &events_native, jobjectArray events, bool writeBack);
 

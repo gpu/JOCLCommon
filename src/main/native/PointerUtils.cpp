@@ -204,7 +204,6 @@ PointerData* initPointerData(JNIEnv *env, jobject pointerObject)
         pointerData->startPointer = (jlong)localPointer;
 
         // Set the actual pointer to be the startPointer + the byte offset
-        long byteOffset = (long)env->GetLongField(pointerObject, NativePointerObject_byteOffset);
         pointerData->pointer = (jlong)(((char*)pointerData->startPointer)+byteOffset);
 
         pointerData->memoryType = POINTERS;
@@ -236,7 +235,6 @@ PointerData* initPointerData(JNIEnv *env, jobject pointerObject)
             pointerData->memoryType = DIRECT;
 
             // Set the actual pointer to be the startPointer + the byte offset
-            long byteOffset = (long)env->GetLongField(pointerObject, NativePointerObject_byteOffset);
             pointerData->pointer = (jlong)(((char*)pointerData->startPointer)+byteOffset);
 
             return pointerData;
@@ -252,8 +250,6 @@ PointerData* initPointerData(JNIEnv *env, jobject pointerObject)
         if (hasArray==JNI_TRUE)
         {
             Logger::log(LOG_DEBUGTRACE, "Obtaining host memory from array in java buffer\n");
-
-            long byteOffset = (long)env->GetLongField(pointerObject, NativePointerObject_byteOffset);
 
             jarray localArray = (jarray)env->CallObjectMethod(buffer, Buffer_array);
             if (env->ExceptionCheck())
