@@ -40,6 +40,7 @@
 // CL includes
 #if defined(__APPLE__) || defined(__MACOSX)
     #include <CL/opencl.h>
+    #include <OpenGL/gl.h>
 #else
     #include <CL/opencl.h>
     #ifdef _WIN32
