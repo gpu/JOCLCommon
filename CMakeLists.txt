@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
 # Overriding the CMake flags to use static runtime libraries
 # See http://www.cmake.org/Wiki/CMake_FAQ#
@@ -7,7 +7,7 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE
    ${CMAKE_CURRENT_SOURCE_DIR}/CMake_c_flag_overrides.cmake)
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
    ${CMAKE_CURRENT_SOURCE_DIR}/CMake_cxx_flag_overrides.cmake)
-   
+
 project(JOCLCommon)
 
 find_package(JNI REQUIRED)
@@ -26,11 +26,14 @@ include_directories(
   src/main/include/
   ${JNI_INCLUDE_DIRS}
 )
-  
+
 add_library(JOCLCommon
-  src/main/native/Logger.cpp 
-  src/main/native/CLJNIUtils.cpp 
-  src/main/native/JNIUtils.cpp 
+  src/main/native/Logger.cpp
+  src/main/native/CLJNIUtils.cpp
+  src/main/native/JNIUtils.cpp
   src/main/native/PointerUtils.cpp
   src/main/native/ConversionsCL.cpp
 )
+
+# Enable C++11 Features.
+set_property(TARGET JOCLCommon PROPERTY CXX_STANDARD 11)

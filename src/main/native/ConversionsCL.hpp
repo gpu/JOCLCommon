@@ -30,12 +30,16 @@
 #include <jni.h>
 
 #include <cstdint>
+#include <cstring>
+
 #include "JOCLCommon.hpp"
+#include "JNIUtils.hpp"
+#include "PointerUtils.hpp"
 
 /**
- * Generic initialization of (primitive) data for data types with a 
- * fixed size. 
- * 
+ * Generic initialization of (primitive) data for data types with a
+ * fixed size.
+ *
  * This will allocate a native array of the same size as the given
  * Java array. If the 'fill' parameter is 'true', then this native
  * array will be filled with the data from the Java array. If the
