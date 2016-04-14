@@ -48,7 +48,11 @@
         #define NOMINMAX
         #include <windows.h>
     #endif // _WIN32
-    #include <GL/gl.h>
+    #ifdef ANDROID
+        #include <GLES/gl.h>
+    #else
+        #include <GL/gl.h>
+    #endif
 #endif // __APPLE__
 
 // Prevent warning of "deprecated conversion from
