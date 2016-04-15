@@ -38,12 +38,7 @@
 extern "C" {
 #endif
 
-#ifdef __APPLE__
-        #include <OpenCL/cl.h>
-    #include <AvailabilityMacros.h>
-#else
-        #include <CL/cl.h>
-#endif
+#include <CL/cl.h>
 
 /* cl_khr_fp16 extension - no extension #define since it has no functions  */
 #define CL_DEVICE_HALF_FP_CONFIG                    0x1033
