@@ -28,6 +28,8 @@
 #ifndef JNI_UTILS_HPP
 #define JNI_UTILS_HPP
 
+#include <cstddef>
+
 // Method ID for the java.lang.Object class
 extern jmethodID Object_getClass; // ()Ljava/lang/Class;
 
