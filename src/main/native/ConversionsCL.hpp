@@ -288,6 +288,9 @@ jobject create(JNIEnv *env, cl_mem& mem_native);
 // Single native cl_command_queue and single Java cl_command_queue object
 bool initNative(JNIEnv *env, jobject commandQueue, cl_command_queue& commandQueue_native, bool fillTarget);
 
+// Single native cl_device_id and single Java cl_device_id object
+bool initNative(JNIEnv *env, jobject device, cl_device_id& device_native, bool fillTarget);
+
 // Native cl_command_queue pointer and single Java cl_command_queue object
 bool initNative(JNIEnv *env, jobject commandQueue, cl_command_queue* &commandQueue_native, bool fillTarget);
 bool releaseNative(JNIEnv *env, cl_command_queue* &commandQueue_native, jobject commandQueue, bool writeBack);

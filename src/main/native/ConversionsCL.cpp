@@ -198,6 +198,21 @@ jobject create(JNIEnv *env, cl_mem& mem_native)
     return mem;
 }
 
+// Single native cl_device_id and single Java cl_device_id object
+bool initNative(JNIEnv *env, jobject device, cl_device_id& device_native, bool fillTarget)
+{
+    if (device != nullptr)
+    {
+        device_native = (cl_device_id)env->GetLongField(device, NativePointerObject_nativePointer);
+    }
+    else
+    {
+        device_native = nullptr;
+    }
+    return true;
+}
+
+
 // Single native cl_command_queue and single Java cl_command_queue object
 bool initNative(JNIEnv *env, jobject commandQueue, cl_command_queue& commandQueue_native, bool fillTarget)
 {
