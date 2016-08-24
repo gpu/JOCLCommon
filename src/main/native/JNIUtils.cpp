@@ -302,3 +302,42 @@ size_t* convertArray(JNIEnv *env, jlongArray array)
     env->ReleasePrimitiveArrayCritical(array, jArray, JNI_ABORT);
     return result;
 }
+
+
+
+bool initNative(JNIEnv *env, jstring &javaString, char* &nativeString, bool fill)
+{
+    if (javaString == nullptr)
+    {
+        delete nativeString;
+        nativeString = nullptr;
+        return true;
+    }
+    jbyteArray bytes = (jbyteArray)env->CallObjectMethod(javaString, String_getBytes);
+    if (env->ExceptionCheck())
+    {
+        return false;
+    }
+    jsize len = env->GetArrayLength(bytes);
+    nativeString = new char[(size_t)(len + 1)];
+    if (nativeString == NULL)
+    {
+        ThrowByName(env, "java/lang/OutOfMemoryError",
+            "Out of memory during string creation");
+        return false;
+    }
+    if (fill)
+    {
+        env->GetByteArrayRegion(bytes, 0, len, (jbyte *)nativeString);
+        nativeString[len] = 0;
+    }
+    return true;
+}
+
+bool releaseNative(JNIEnv *env, char* &nativeString, jstring &javaString, bool writeBack)
+{
+    // No writing back to Java Strings. They are supposed to be immutable.
+    delete nativeString;
+    nativeString = nullptr;
+    return true;
+}

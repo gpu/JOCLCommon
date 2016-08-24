@@ -154,159 +154,103 @@ bool releaseNative(JNIEnv *env, cl_double* &nativeObject, jdoubleArray javaObjec
 
 
 // Single native cl_context and single Java cl_context object
-bool initNative(JNIEnv *env, jobject context, cl_context& context_native, bool fillTarget)
+bool initNative(JNIEnv *env, jobject &javaObject, cl_context& nativeObject, bool fillTarget)
 {
-    if (context != nullptr)
-    {
-        context_native = (cl_context)env->GetLongField(context, NativePointerObject_nativePointer);
-    }
-    else
-    {
-        context_native = nullptr;
-    }
-    return true;
+    return initNativeGenericNativePointerObject<cl_context>(env, javaObject, nativeObject, fillTarget);
 }
-
 
 // Single native cl_mem and single Java cl_mem object
-bool initNative(JNIEnv *env, jobject mem, cl_mem& mem_native, bool fillTarget)
+bool initNative(JNIEnv *env, jobject &javaObject, cl_mem& nativeObject, bool fillTarget)
 {
-    if (mem != nullptr)
-    {
-        mem_native = (cl_mem)env->GetLongField(mem, NativePointerObject_nativePointer);
-    }
-    else
-    {
-        mem_native = nullptr;
-    }
-    return true;
+    return initNativeGenericNativePointerObject<cl_mem>(env, javaObject, nativeObject, fillTarget);
+}
+bool releaseNative(JNIEnv *env, cl_mem &nativeObject, jobject &javaObject, bool writeBack)
+{
+    return releaseNativeGenericNativePointerObject<cl_mem>(env, nativeObject, javaObject, writeBack);
+}
+
+// Create a Java cl_mem from a native cl_mem
+jobject create(JNIEnv *env, cl_mem& nativeObject)
+{
+    return create<cl_mem>(env, nativeObject, cl_mem_Class, cl_mem_Constructor);
 }
 
 
-jobject create(JNIEnv *env, cl_mem& mem_native)
+// Single native cl_event and single Java cl_event object
+bool initNative(JNIEnv *env, jobject &javaObject, cl_event& nativeObject, bool fillTarget)
 {
-    if (mem_native == nullptr)
-    {
-        return nullptr;
-    }
-    jobject mem = env->NewObject(cl_mem_Class, cl_mem_Constructor);
-    if (env->ExceptionCheck())
-    {
-        return nullptr;
-    }
-    env->SetLongField(mem, NativePointerObject_nativePointer, (jlong)mem_native);
-    return mem;
+    return initNativeGenericNativePointerObject<cl_event>(env, javaObject, nativeObject, fillTarget);
 }
+bool releaseNative(JNIEnv *env, cl_event &nativeObject, jobject &javaObject, bool writeBack)
+{
+    return releaseNativeGenericNativePointerObject<cl_event>(env, nativeObject, javaObject, writeBack);
+}
+
 
 // Single native cl_device_id and single Java cl_device_id object
-bool initNative(JNIEnv *env, jobject device, cl_device_id& device_native, bool fillTarget)
+bool initNative(JNIEnv *env, jobject &javaObject, cl_device_id& nativeObject, bool fillTarget)
 {
-    if (device != nullptr)
-    {
-        device_native = (cl_device_id)env->GetLongField(device, NativePointerObject_nativePointer);
-    }
-    else
-    {
-        device_native = nullptr;
-    }
-    return true;
+    return initNativeGenericNativePointerObject<cl_device_id>(env, javaObject, nativeObject, fillTarget);
 }
 
 
 // Single native cl_command_queue and single Java cl_command_queue object
-bool initNative(JNIEnv *env, jobject commandQueue, cl_command_queue& commandQueue_native, bool fillTarget)
+bool initNative(JNIEnv *env, jobject &javaObject, cl_command_queue& nativeObject, bool fillTarget)
 {
-    if (commandQueue != nullptr)
-    {
-        commandQueue_native = (cl_command_queue)env->GetLongField(commandQueue, NativePointerObject_nativePointer);
-    }
-    else
-    {
-        commandQueue_native = nullptr;
-    }
-    return true;
+    return initNativeGenericNativePointerObject<cl_command_queue>(env, javaObject, nativeObject, fillTarget);
 }
+bool releaseNative(JNIEnv *env, cl_command_queue &nativeObject, jobject &javaObject, bool writeBack)
+{
+    return releaseNativeGenericNativePointerObject<cl_command_queue>(env, nativeObject, javaObject, writeBack);
+}
+
 
 // Native cl_command_queue pointer and single Java cl_command_queue object
-bool initNative(JNIEnv *env, jobject commandQueue, cl_command_queue* &commandQueue_native, bool fillTarget)
+bool initNative(JNIEnv *env, jobject &javaObject, cl_command_queue* &nativeObject, bool fillTarget)
 {
-    if (commandQueue == nullptr)
-    {
-        commandQueue_native = nullptr;
-        return true;
-    }
-    commandQueue_native = new cl_command_queue[1]();
-    if (fillTarget)
-    {
-        commandQueue_native[0] = (cl_command_queue)env->GetLongField(commandQueue, NativePointerObject_nativePointer);
-    }
-    return true;
+    return initNativeGenericNativePointerObjectPointer<cl_command_queue>(env, javaObject, nativeObject, fillTarget);
 }
 
-bool releaseNative(JNIEnv *env, cl_command_queue* &commandQueue_native, jobject commandQueue, bool writeBack)
+bool releaseNative(JNIEnv *env, cl_command_queue* &nativeObject, jobject &javaObject, bool writeBack)
 {
-    if (writeBack && commandQueue != nullptr && commandQueue_native != nullptr)
-    {
-        env->SetLongField(commandQueue, NativePointerObject_nativePointer, (jlong)(*commandQueue_native));
-    }
-    delete[] commandQueue_native;
-    commandQueue_native = nullptr;
-    return true;
+    return releaseNativeGenericNativePointerObjectPointer<cl_command_queue>(env, nativeObject, javaObject, writeBack);
 }
-
 
 
 
 // Native cl_command_queue pointer and Java cl_command_queue array
-bool initNative(JNIEnv *env, jobjectArray commandQueues, cl_command_queue* &commandQueues_native, bool fillTarget)
+bool initNative(JNIEnv *env, jobjectArray &javaObjectArray, cl_command_queue* &nativeObjectArray, bool fillTarget)
 {
-    return initNativeGenericNativePointerObject<cl_command_queue>(env, commandQueues, commandQueues_native, fillTarget);
+    return initNativeGenericNativePointerObjectArray<cl_command_queue>(env, javaObjectArray, nativeObjectArray, fillTarget);
 }
 
-bool releaseNative(JNIEnv *env, cl_command_queue* &commandQueues_native, jobjectArray commandQueues, bool writeBack)
+bool releaseNative(JNIEnv *env, cl_command_queue* &nativeObjectArray, jobjectArray &javaObjectArray, bool writeBack)
 {
-    return releaseNativeGenericNativePointerObject<cl_command_queue>(env, commandQueues_native, commandQueues, writeBack);
+    return releaseNativeGenericNativePointerObjectArray<cl_command_queue>(env, nativeObjectArray, javaObjectArray, writeBack);
 }
 
 
 
 // Native cl_event pointer and single Java cl_event object
-bool releaseNative(JNIEnv *env, cl_event* &event_native, jobject event, bool writeBack)
+bool initNative(JNIEnv *env, jobject &javaObject, cl_event* &nativeObject, bool fillTarget)
 {
-    if (writeBack && event != nullptr && event_native != nullptr)
-    {
-        env->SetLongField(event, NativePointerObject_nativePointer, (jlong)(*event_native));
-    }
-    delete[] event_native;
-    event_native = nullptr;
-    return true;
+    return initNativeGenericNativePointerObjectPointer<cl_event>(env, javaObject, nativeObject, fillTarget);
 }
-
-bool initNative(JNIEnv *env, jobject event, cl_event* &event_native, bool fillTarget)
+bool releaseNative(JNIEnv *env, cl_event* &nativeObject, jobject &javaObject, bool writeBack)
 {
-    if (event == nullptr)
-    {
-        event_native = nullptr;
-        return true;
-    }
-    event_native = new cl_event[1]();
-    if (fillTarget)
-    {
-        event_native[0] = (cl_event)env->GetLongField(event, NativePointerObject_nativePointer);
-    }
-    return true;
+    return releaseNativeGenericNativePointerObjectPointer<cl_event>(env, nativeObject, javaObject, writeBack);
 }
 
 
 // Native cl_event pointer and Java cl_event array
-bool initNative(JNIEnv *env, jobjectArray events, cl_event* &events_native, bool fillTarget)
+bool initNative(JNIEnv *env, jobjectArray &javaObjectArray, cl_event* &nativeObjectArray, bool fillTarget)
 {
-    return initNativeGenericNativePointerObject<cl_event>(env, events, events_native, fillTarget);
+    return initNativeGenericNativePointerObjectArray<cl_event>(env, javaObjectArray, nativeObjectArray, fillTarget);
 }
 
-bool releaseNative(JNIEnv *env, cl_event* &events_native, jobjectArray events, bool writeBack)
+bool releaseNative(JNIEnv *env, cl_event* &nativeObjectArray, jobjectArray &javaObjectArray, bool writeBack)
 {
-    return releaseNativeGenericNativePointerObject<cl_event>(env, events_native, events, writeBack);
+    return releaseNativeGenericNativePointerObjectArray<cl_event>(env, nativeObjectArray, javaObjectArray, writeBack);
 }
 
 
