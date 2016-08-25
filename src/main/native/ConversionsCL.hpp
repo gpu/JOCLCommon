@@ -135,7 +135,7 @@ bool releaseNativeGenericFixedSize(
             nativeObject = nullptr;
             return false;
         }
-        std::memcpy(nativeObject, primitiveArray, length * sizeof(JavaType));
+        std::memcpy(primitiveArray, nativeObject, length * sizeof(JavaType));
         env->ReleasePrimitiveArrayCritical(javaObject, primitiveArray, 0);
     }
     delete[] nativeObject;
