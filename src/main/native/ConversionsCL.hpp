@@ -346,7 +346,7 @@ bool initNativeGenericNativePointerObjectPointer(JNIEnv *env, jobject &javaObjec
 }
 
 /**
- * Generic release of a native OpenCL object that was created
+ * Generic release of a native OpenCL object pointer that was created
  * from a Java NativePointerObject.
  *
  * The OpenCL object is assumed to be an opaque pointer. 
@@ -358,7 +358,7 @@ bool releaseNativeGenericNativePointerObjectPointer(JNIEnv *env, NativeType* &na
 {
     if (writeBack && nativeObject != nullptr && javaObject != nullptr)
     {
-        env->SetLongField(javaObject, NativePointerObject_nativePointer, (jlong)nativeObject);
+        env->SetLongField(javaObject, NativePointerObject_nativePointer, (jlong)*nativeObject);
     }
     delete nativeObject;
     nativeObject = nullptr;
