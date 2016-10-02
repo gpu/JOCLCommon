@@ -29,7 +29,7 @@ include_directories(
   ${JNI_INCLUDE_DIRS}
 )
 
-add_library(JOCLCommon
+add_library(JOCLCommon SHARED
   src/main/native/Logger.cpp
   src/main/native/CLJNIUtils.cpp
   src/main/native/JNIUtils.cpp
