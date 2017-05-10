@@ -66,4 +66,8 @@ size_t* convertArray(JNIEnv *env, jlongArray array);
 bool initNative(JNIEnv *env, jstring &javaString, char* &nativeString, bool fill);
 bool releaseNative(JNIEnv *env, char* &nativeString, jstring &javaString, bool writeBack);
 
+bool initNative(JNIEnv *env, jobjectArray javaObject, char** &nativeObject, bool fill);
+bool releaseNative(JNIEnv *env, char** &nativeObject, jobjectArray javaObject, bool writeBack);
+
+
 #endif // JNI_UTILS_HPP

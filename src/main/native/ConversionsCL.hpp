@@ -406,8 +406,14 @@ bool releaseNative(JNIEnv *env, cl_event* &nativeObjectArray, jobjectArray &java
 bool initNative(JNIEnv *env, jfloatArray values, cl_float2& values_native, bool fillTarget);
 bool releaseNative(JNIEnv *env, cl_float2& values_native, jfloatArray values, bool writeBack);
 
+bool initNative(JNIEnv *env, jfloatArray values, cl_float2*& values_native, bool fillTarget);
+bool releaseNative(JNIEnv *env, cl_float2*& values_native, jfloatArray values, bool writeBack);
+
 bool initNative(JNIEnv *env, jdoubleArray values, cl_double2& values_native, bool fillTarget);
 bool releaseNative(JNIEnv *env, cl_double2& values_native, jdoubleArray values, bool writeBack);
+
+bool initNative(JNIEnv *env, jdoubleArray values, cl_double2*& values_native, bool fillTarget);
+bool releaseNative(JNIEnv *env, cl_double2*& values_native, jdoubleArray values, bool writeBack);
 
 // Create a Java NativePointerObject from a native object
 template <typename NativeType>

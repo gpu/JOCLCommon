@@ -292,6 +292,55 @@ bool releaseNative(JNIEnv *env, cl_float2& values_native, jfloatArray values, bo
     return true;
 }
 
+bool initNative(JNIEnv *env, jfloatArray values, cl_float2*& values_native, bool fillTarget)
+{
+    if (values == nullptr)
+    {
+        values_native = nullptr;
+        return true;
+    }
+    if (fillTarget)
+    {
+        jsize length = env->GetArrayLength(values);
+        if ((length & 1) == 1)
+        {
+            ThrowByName(env, "java/lang/IllegalArgumentException",
+                "Array length must be divisible by 2");
+        }
+        jsize numElements = length / 2;
+        values_native = new cl_float2[(size_t)numElements];
+        env->GetFloatArrayRegion(values, 0, length, (float*)values_native);
+    }
+    return true;
+}
+
+bool releaseNative(JNIEnv *env, cl_float2*& values_native, jfloatArray values, bool writeBack)
+{
+    if (values_native == nullptr)
+    {
+        values = nullptr;
+        return true;
+    }
+    if (values == nullptr)
+    {
+        delete[] values_native;
+        return true;
+    }
+    if (writeBack)
+    {
+        jsize length = env->GetArrayLength(values);
+        if ((length & 1) == 1)
+        {
+            ThrowByName(env, "java/lang/IllegalArgumentException",
+                "Array length must be divisible by 2");
+        }
+        env->SetFloatArrayRegion(values, 0, length, (float*)values_native);
+    }
+    delete[] values_native;
+    return true;
+}
+
+
 
 bool initNative(JNIEnv *env, jdoubleArray values, cl_double2& values_native, bool fillTarget)
 {
@@ -329,4 +378,51 @@ bool releaseNative(JNIEnv *env, cl_double2& values_native, jdoubleArray values, 
     return true;
 }
 
+bool initNative(JNIEnv *env, jdoubleArray values, cl_double2*& values_native, bool fillTarget)
+{
+    if (values == nullptr)
+    {
+        values_native = nullptr;
+        return true;
+    }
+    if (fillTarget)
+    {
+        jsize length = env->GetArrayLength(values);
+        if ((length & 1) == 1)
+        {
+            ThrowByName(env, "java/lang/IllegalArgumentException",
+                "Array length must be divisible by 2");
+        }
+        jsize numElements = length / 2;
+        values_native = new cl_double2[(size_t)numElements];
+        env->GetDoubleArrayRegion(values, 0, length, (double*)values_native);
+    }
+    return true;
+}
+
+bool releaseNative(JNIEnv *env, cl_double2*& values_native, jdoubleArray values, bool writeBack)
+{
+    if (values_native == nullptr)
+    {
+        values = nullptr;
+        return true;
+    }
+    if (values == nullptr)
+    {
+        delete[] values_native;
+        return true;
+    }
+    if (writeBack)
+    {
+        jsize length = env->GetArrayLength(values);
+        if ((length & 1) == 1)
+        {
+            ThrowByName(env, "java/lang/IllegalArgumentException",
+                "Array length must be divisible by 2");
+        }
+        env->SetDoubleArrayRegion(values, 0, length, (double*)values_native);
+    }
+    delete[] values_native;
+    return true;
+}
 

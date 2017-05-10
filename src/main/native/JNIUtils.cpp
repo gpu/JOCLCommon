@@ -341,3 +341,49 @@ bool releaseNative(JNIEnv *env, char* &nativeString, jstring &javaString, bool w
     nativeString = nullptr;
     return true;
 }
+
+
+// Initialization and release of string arrays. 
+bool initNative(JNIEnv *env, jobjectArray javaObject, char** &nativeObject, bool fill)
+{
+    if (javaObject == nullptr)
+    {
+        nativeObject = nullptr;
+        return true;
+    }
+    jsize length = env->GetArrayLength(javaObject);
+    delete[] nativeObject;
+    nativeObject = new char*[(size_t)length];
+    for (jsize index = 0; index < length; index++)
+    {
+        jobject javaElement = env->GetObjectArrayElement(javaObject, index);
+        jstring javaString = (jstring)javaElement;
+        if (!initNative(env, javaString, nativeObject[index], fill))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool releaseNative(JNIEnv *env, char** &nativeObject, jobjectArray javaObject, bool writeBack)
+{
+    if (nativeObject == nullptr)
+    {
+        javaObject = nullptr;
+        return true;
+    }
+    jsize length = env->GetArrayLength(javaObject);
+    for (jsize index = 0; index < length; index++)
+    {
+        jobject javaElement = env->GetObjectArrayElement(javaObject, index);
+        jstring javaString = (jstring)javaElement;
+        char *nativeString = nativeObject[index];
+        if (!releaseNative(env, nativeString, javaString, writeBack))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
