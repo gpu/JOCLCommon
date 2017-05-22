@@ -99,6 +99,7 @@ bool initNative(JNIEnv *env, jlongArray javaObject, cl_ulong* &nativeObject, boo
 bool initNative(JNIEnv *env, jfloatArray javaObject, cl_float* &nativeObject, bool fill);
 bool initNative(JNIEnv *env, jdoubleArray javaObject, cl_double* &nativeObject, bool fill);
 
+bool initNative_size_t(JNIEnv *env, jlongArray javaObject, size_t* &nativeObject, bool fill);
 
 
 /**
@@ -158,6 +159,7 @@ bool releaseNative(JNIEnv *env, cl_ulong* &nativeObject, jlongArray javaObject, 
 bool releaseNative(JNIEnv *env, cl_float* &nativeObject, jfloatArray javaObject, bool writeBack);
 bool releaseNative(JNIEnv *env, cl_double* &nativeObject, jdoubleArray javaObject, bool writeBack);
 
+bool releaseNative_size_t(JNIEnv *env, size_t* &nativeObject, jlongArray javaObject, bool writeBack);
 
 
 

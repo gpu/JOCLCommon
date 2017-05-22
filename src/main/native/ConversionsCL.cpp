@@ -92,6 +92,45 @@ bool initNative(JNIEnv *env, jdoubleArray javaObject, cl_double* &nativeObject, 
 }
 
 
+// Note: On some systems, size_t is defined to be the same 
+// as cl_ulong, whereas on others, it isn't. Additionally,
+// the size of size_t is not known.
+bool initNative_size_t(JNIEnv *env, jlongArray javaObject, size_t* &nativeObject, bool fill)
+{
+    if (javaObject == nullptr)
+    {
+        nativeObject = nullptr;
+        return true;
+    }
+    jsize length = env->GetArrayLength(javaObject);
+    nativeObject = new size_t[size_t(length)];
+    if (nativeObject == nullptr)
+    {
+        ThrowByName(env, "java/lang/OutOfMemoryError",
+            "Out of memory during array creation");
+        return false;
+    }
+    if (fill)
+    {
+        jlong *primitiveArray =
+            (jlong*)env->GetPrimitiveArrayCritical(javaObject, nullptr);
+        if (primitiveArray == nullptr)
+        {
+            delete[] nativeObject;
+            nativeObject = nullptr;
+            return false;
+        }
+        for (jsize i = 0; i < length; i++)
+        {
+            nativeObject[i] = size_t(primitiveArray[i]);
+        }
+        env->ReleasePrimitiveArrayCritical(javaObject, primitiveArray, JNI_ABORT);
+    }
+    return true;
+}
+
+
+
 
 bool releaseNative(JNIEnv *env, cl_char* &nativeObject, jbyteArray javaObject, bool writeBack)
 {
@@ -150,6 +189,41 @@ bool releaseNative(JNIEnv *env, cl_double* &nativeObject, jdoubleArray javaObjec
 {
     return releaseNativeGenericFixedSize<jdouble, jdoubleArray, cl_double>(env, nativeObject, javaObject, writeBack);
 }
+
+
+// Note: On some systems, size_t is defined to be the same 
+// as cl_ulong, whereas on others, it isn't. Additionally,
+// the size of size_t is not known.
+bool releaseNative_size_t(JNIEnv *env, size_t* &nativeObject, jlongArray javaObject, bool writeBack)
+{
+    if (javaObject == nullptr)
+    {
+        delete[] nativeObject;
+        nativeObject = nullptr;
+        return true;
+    }
+    if (writeBack)
+    {
+        jsize length = env->GetArrayLength(javaObject);
+        jlong *primitiveArray =
+            (jlong*)env->GetPrimitiveArrayCritical(javaObject, nullptr);
+        if (primitiveArray == nullptr)
+        {
+            delete[] nativeObject;
+            nativeObject = nullptr;
+            return false;
+        }
+        for (jsize i = 0; i < length; i++)
+        {
+            primitiveArray[i] = jlong(nativeObject[i]);
+        }
+        env->ReleasePrimitiveArrayCritical(javaObject, primitiveArray, 0);
+    }
+    delete[] nativeObject;
+    nativeObject = nullptr;
+    return true;
+}
+
 
 
 
