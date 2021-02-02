@@ -103,7 +103,7 @@ bool initNative_size_t(JNIEnv *env, jlongArray javaObject, size_t* &nativeObject
         return true;
     }
     jsize length = env->GetArrayLength(javaObject);
-    nativeObject = new size_t[size_t(length)];
+    nativeObject = new (std::nothrow) size_t[size_t(length)];
     if (nativeObject == nullptr)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",

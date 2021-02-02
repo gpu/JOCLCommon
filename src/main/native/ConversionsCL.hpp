@@ -31,6 +31,7 @@
 
 #include <cstdint>
 #include <cstring>
+#include <new>
 
 #include "JOCLCommon.hpp"
 #include "JNIUtils.hpp"
@@ -61,7 +62,7 @@ bool initNativeGenericFixedSize(
         return true;
     }
     jsize length = env->GetArrayLength(javaObject);
-    nativeObject = new NativeType[size_t(length)];
+    nativeObject = new (std::nothrow) NativeType[size_t(length)];
     if (nativeObject == nullptr)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -189,7 +190,7 @@ bool initNativeGenericNativePointerObjectArray(
     }
 
     jsize length = env->GetArrayLength(objects);
-    objects_native = new NativeType[size_t(length)];
+    objects_native = new (std::nothrow) NativeType[size_t(length)];
     if (objects_native == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",

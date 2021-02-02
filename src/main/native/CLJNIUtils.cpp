@@ -183,7 +183,7 @@ cl_context_properties* createContextPropertiesArray(JNIEnv *env, jobject propert
         }
         javaPropertiesSize++;
     }
-    cl_context_properties *nativeProperties = new cl_context_properties[javaPropertiesSize + 1];
+    cl_context_properties *nativeProperties = new (std::nothrow) cl_context_properties[javaPropertiesSize + 1];
     if (nativeProperties == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -232,7 +232,7 @@ cl_queue_properties* createQueuePropertiesArray(JNIEnv *env, jobject properties)
         }
         javaPropertiesSize++;
     }
-    cl_queue_properties *nativeProperties = new cl_queue_properties[javaPropertiesSize + 1];
+    cl_queue_properties *nativeProperties = new (std::nothrow) cl_queue_properties[javaPropertiesSize + 1];
     if (nativeProperties == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -280,7 +280,7 @@ cl_pipe_properties* createPipePropertiesArray(JNIEnv *env, jobject properties)
         }
         javaPropertiesSize++;
     }
-    cl_pipe_properties *nativeProperties = new cl_pipe_properties[javaPropertiesSize + 1];
+    cl_pipe_properties *nativeProperties = new (std::nothrow) cl_pipe_properties[javaPropertiesSize + 1];
     if (nativeProperties == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -328,7 +328,7 @@ cl_sampler_properties* createSamplerPropertiesArray(JNIEnv *env, jobject propert
         }
         javaPropertiesSize++;
     }
-    cl_sampler_properties *nativeProperties = new cl_sampler_properties[javaPropertiesSize + 1];
+    cl_sampler_properties *nativeProperties = new (std::nothrow) cl_sampler_properties[javaPropertiesSize + 1];
     if (nativeProperties == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -454,7 +454,7 @@ cl_device_partition_property* getCl_device_partition_property (JNIEnv *env, jobj
         }
         javaPropertiesSize++;
     }
-    cl_device_partition_property *nativeProperties = new cl_device_partition_property[javaPropertiesSize + 1];
+    cl_device_partition_property *nativeProperties = new (std::nothrow) cl_device_partition_property[javaPropertiesSize + 1];
     if (nativeProperties == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -485,7 +485,7 @@ cl_device_partition_property* getCl_device_partition_property (JNIEnv *env, jobj
  */
 cl_event* createEventList(JNIEnv *env, jobjectArray event_list, cl_uint num_events)
 {
-    cl_event* nativeEvent_list = new cl_event[num_events];
+    cl_event* nativeEvent_list = new (std::nothrow) cl_event[num_events];
     if (nativeEvent_list == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -496,6 +496,7 @@ cl_event* createEventList(JNIEnv *env, jobjectArray event_list, cl_uint num_even
     cl_uint event_listLength = (cl_uint)env->GetArrayLength(event_list);
     if (event_listLength < num_events)
     {
+        delete[] nativeEvent_list;
         ThrowByName(env, "java/lang/ArrayIndexOutOfBoundsException",
             "Event list size is smaller than specified number of events");
         return NULL;
@@ -533,7 +534,7 @@ cl_event* createEventList(JNIEnv *env, jobjectArray event_list, cl_uint num_even
  */
 cl_device_id* createDeviceList(JNIEnv *env, jobjectArray device_list, cl_uint num_devices)
 {
-    cl_device_id *nativeDevice_list = new cl_device_id[num_devices];
+    cl_device_id *nativeDevice_list = new (std::nothrow) cl_device_id[num_devices];
     if (nativeDevice_list == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -544,6 +545,7 @@ cl_device_id* createDeviceList(JNIEnv *env, jobjectArray device_list, cl_uint nu
     cl_uint device_listLength = (cl_uint)env->GetArrayLength(device_list);
     if (device_listLength < num_devices)
     {
+        delete[] nativeDevice_list;
         ThrowByName(env, "java/lang/ArrayIndexOutOfBoundsException",
             "Device list size is smaller than specified number of devices");
         return NULL;
@@ -582,7 +584,7 @@ cl_device_id* createDeviceList(JNIEnv *env, jobjectArray device_list, cl_uint nu
  */
 cl_mem* createMemList(JNIEnv *env, jobjectArray mem_list, cl_uint num_mems)
 {
-    cl_mem *nativeMem_list = new cl_mem[num_mems];
+    cl_mem *nativeMem_list = new (std::nothrow) cl_mem[num_mems];
     if (nativeMem_list == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -593,6 +595,7 @@ cl_mem* createMemList(JNIEnv *env, jobjectArray mem_list, cl_uint num_mems)
     cl_uint mem_listLength = (cl_uint)env->GetArrayLength(mem_list);
     if (mem_listLength < num_mems)
     {
+        delete[] nativeMem_list;
         ThrowByName(env, "java/lang/ArrayIndexOutOfBoundsException",
             "Memory object list size is smaller than specified number of memory objects");
         return NULL;
@@ -631,7 +634,7 @@ cl_mem* createMemList(JNIEnv *env, jobjectArray mem_list, cl_uint num_mems)
  */
 void** createSvmPointers(JNIEnv *env, jobjectArray svm_pointers, cl_uint num_svm_pointers)
 {
-    void** nativeSvm_pointers = new void*[num_svm_pointers];
+    void** nativeSvm_pointers = new (std::nothrow) void*[num_svm_pointers];
     if (nativeSvm_pointers == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -642,6 +645,7 @@ void** createSvmPointers(JNIEnv *env, jobjectArray svm_pointers, cl_uint num_svm
     cl_uint svm_pointersLength = (cl_uint)env->GetArrayLength(svm_pointers);
     if (svm_pointersLength < num_svm_pointers)
     {
+        delete[] nativeSvm_pointers;
         ThrowByName(env, "java/lang/ArrayIndexOutOfBoundsException",
             "Pointer array size is smaller than specified number of pointers");
         return NULL;
@@ -680,7 +684,7 @@ void** createSvmPointers(JNIEnv *env, jobjectArray svm_pointers, cl_uint num_svm
  */
 cl_program* createProgramList(JNIEnv *env, jobjectArray program_list, cl_uint num_programs)
 {
-    cl_program* nativeProgram_list = new cl_program[num_programs];
+    cl_program* nativeProgram_list = new (std::nothrow) cl_program[num_programs];
     if (nativeProgram_list == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -691,6 +695,7 @@ cl_program* createProgramList(JNIEnv *env, jobjectArray program_list, cl_uint nu
     cl_uint program_listLength = (cl_uint)env->GetArrayLength(program_list);
     if (program_listLength < num_programs)
     {
+        delete[] nativeProgram_list;
         ThrowByName(env, "java/lang/ArrayIndexOutOfBoundsException",
             "Program list size is smaller than specified number of programs");
         return NULL;
@@ -728,7 +733,7 @@ CallbackInfo* initCallbackInfo(JNIEnv *env, jobject pfn_notify, jobject user_dat
 {
     Logger::log(LOG_DEBUGTRACE, "Executing initCallbackInfo\n");
 
-    CallbackInfo *callbackInfo = new CallbackInfo();
+    CallbackInfo *callbackInfo = new (std::nothrow) CallbackInfo();
     if (callbackInfo == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -795,8 +800,9 @@ void destroyCallbackInfo(JNIEnv *env, cl_context context)
         contextCallbackMap.find(context);
     if (iter != contextCallbackMap.end())
     {
+        CallbackInfo* c = iter->second;
         contextCallbackMap.erase(iter);
-        deleteCallbackInfo(env, iter->second);
+        deleteCallbackInfo(env, c);
     }
 }
 
