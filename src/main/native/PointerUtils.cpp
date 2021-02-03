@@ -28,6 +28,7 @@
 #include "PointerUtils.hpp"
 #include "JNIUtils.hpp"
 #include "Logger.hpp"
+#include <new>
 
 
 // Class and method ID for org.jocl.Pointer and its constructor
@@ -115,7 +116,7 @@ PointerData* initPointerData(JNIEnv *env, jobject pointerObject)
 {
     Logger::log(LOG_DEBUGTRACE, "Initializing pointer data for Java Pointer object %p\n", pointerObject);
 
-    PointerData *pointerData = new PointerData();
+    PointerData *pointerData = new (std::nothrow) PointerData();
     if (pointerData == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -166,11 +167,12 @@ PointerData* initPointerData(JNIEnv *env, jobject pointerObject)
         // Create an array containing the native representations of the
         // pointers, and store them as the data of the pointerData
         jsize size = env->GetArrayLength(pointersArray);
-        void **localPointer = new void*[(size_t)size];
+        void **localPointer = new (std::nothrow) void*[(size_t)size];
         PointerData **localPointerDatas = new PointerData*[(size_t)size];
 
         if (localPointer == NULL)
         {
+            delete[] localPointerDatas;
             ThrowByName(env, "java/lang/OutOfMemoryError",
                 "Out of memory while obtaining native pointers");
             return NULL;
@@ -180,6 +182,8 @@ PointerData* initPointerData(JNIEnv *env, jobject pointerObject)
             jobject p = env->GetObjectArrayElement(pointersArray, i);
             if (env->ExceptionCheck())
             {
+                delete[] localPointer;
+                delete[] localPointerDatas;
                 return NULL;
             }
             if (p != NULL)

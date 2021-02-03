@@ -26,6 +26,7 @@
  */
 
 #include <jni.h>
+#include <new>
 
 #include "JNIUtils.hpp"
 #include "Logger.hpp"
@@ -258,7 +259,7 @@ char *convertString(JNIEnv *env, jstring js, int *length)
         {
             *length = (int)len;
         }
-        result = new char[(size_t)(len + 1)];
+        result = new (std::nothrow) char[(size_t)(len + 1)];
         if (result == NULL)
         {
             ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -283,7 +284,7 @@ char *convertString(JNIEnv *env, jstring js, int *length)
 size_t* convertArray(JNIEnv *env, jlongArray array)
 {
     jsize arrayLength = env->GetArrayLength(array);
-    size_t *result = new size_t[(size_t)arrayLength];
+    size_t *result = new (std::nothrow) size_t[(size_t)arrayLength];
     if (result == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -293,6 +294,7 @@ size_t* convertArray(JNIEnv *env, jlongArray array)
     jlong *jArray = (jlong*)env->GetPrimitiveArrayCritical(array, NULL);
     if (jArray == NULL)
     {
+        delete[] result;
         return NULL;
     }
     for (int i=0; i<arrayLength; i++)
@@ -319,7 +321,7 @@ bool initNative(JNIEnv *env, jstring &javaString, char* &nativeString, bool fill
         return false;
     }
     jsize len = env->GetArrayLength(bytes);
-    nativeString = new char[(size_t)(len + 1)];
+    nativeString = new (std::nothrow) char[(size_t)(len + 1)];
     if (nativeString == NULL)
     {
         ThrowByName(env, "java/lang/OutOfMemoryError",
@@ -353,7 +355,7 @@ bool initNative(JNIEnv *env, jobjectArray javaObject, char** &nativeObject, bool
     }
     jsize length = env->GetArrayLength(javaObject);
     delete[] nativeObject;
-    nativeObject = new char*[(size_t)length];
+    nativeObject = new (std::nothrow) char*[(size_t)length];
     for (jsize index = 0; index < length; index++)
     {
         jobject javaElement = env->GetObjectArrayElement(javaObject, index);
